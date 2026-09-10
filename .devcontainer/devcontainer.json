@@ -1,6 +1,11 @@
 {
   "name": "streamdeck-plugin-au-uv",
-  "image": "mcr.microsoft.com/devcontainers/javascript-node:1-20-bookworm",
+  "image": "mcr.microsoft.com/devcontainers/base:bookworm",
+  "features": {
+    "ghcr.io/devcontainers/features/node:1": {
+      "version": "20.19.5"
+    }
+  },
   "postCreateCommand": "npm install",
   "customizations": {
     "vscode": {

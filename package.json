@@ -16,5 +16,8 @@
   },
   "devDependencies": {
     "@elgato/cli": "^1.7.1"
+  },
+  "engines": {
+    "node": ">=20.1.0"
   }
 }

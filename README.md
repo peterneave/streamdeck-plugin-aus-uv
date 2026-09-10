@@ -3,7 +3,7 @@
 A Stream Deck plugin that displays current Australian UV index readings from the [ARPANSA UV data feed](https://uvdata.arpansa.gov.au/xml/uvvalues.xml). Monitor the latest UV value for a selected location directly on your Elgato Stream Deck.
 
 ![Version](https://img.shields.io/badge/version-0.1.0.0-blue)
-![Node.js](https://img.shields.io/badge/node-20-green)
+![Node.js](https://img.shields.io/badge/node-20.1%2B-green)
 ![Stream Deck SDK](https://img.shields.io/badge/Stream%20Deck%20SDK-2-orange)
 
 ## Images
@@ -25,7 +25,7 @@ Screenshots coming soon.
 - **Operating System**:
   - Windows 10 or higher
   - macOS 13 or higher
-- **Node.js**: Version 20 or higher
+- **Node.js**: Version 20.1 or higher
 - **Internet Access**: Required to reach the ARPANSA UV feed
 
 ## Installation
@@ -55,6 +55,8 @@ After adding the action to your Stream Deck:
    - Every 60 minutes
 4. **Press the key** at any time to force an immediate refresh
 
+> ℹ️ **Version note**: Stream Deck manifests use a four-part plugin version (`0.1.0.0` here), while `package.json` keeps the npm-compatible `0.1.0` version.
+
 ## Building from Source
 
 ### Setup
@@ -62,8 +64,8 @@ After adding the action to your Stream Deck:
 1. **Clone the repository**:
 
    ```bash
-   git clone https://github.com/peterneave/streamdeck-plugin-aus-uv.git
-   cd streamdeck-plugin-aus-uv
+   git clone https://github.com/peterneave/streamdeck-plugin-aus-uv.git streamdeck-plugin-au-uv
+   cd streamdeck-plugin-au-uv
    ```
 
 2. **Install dependencies**:
@@ -74,7 +76,7 @@ After adding the action to your Stream Deck:
 
 3. **Open the repo in VS Code or a dev container**:
 
-   - `.devcontainer/devcontainer.json` installs Node.js 20 tooling and runs `npm install`
+   - `.devcontainer/devcontainer.json` pins a Node.js 20.19.5 development environment and runs `npm install`
    - `.vscode/tasks.json` includes pack and link tasks for local Stream Deck development
 
 ### Build Commands
@@ -121,7 +123,7 @@ After adding the action to your Stream Deck:
 ### Project Structure
 
 ```text
-streamdeck-plugin-aus-uv/
+streamdeck-plugin-au-uv/
 ├── .devcontainer/                               # Dev container configuration
 ├── .vscode/                                     # VS Code tasks and workspace settings
 ├── com.peterneave.streamdeck-plugin-au-uv.sdPlugin/
