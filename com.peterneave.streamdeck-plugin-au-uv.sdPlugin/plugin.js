@@ -14,7 +14,12 @@ const state = {
   pluginUuid: null,
   contexts: new Map(),
   intervals: new Map(),
+  inFlightRefreshes: new Map(),
+  locationsCache: null,
 };
+
+let fetchUvLocationsImpl = fetchUvLocations;
+let resolveUvForLocationImpl = resolveUvForLocation;
 
 function send(event, payload = {}) {
   if (!state.ws || state.ws.readyState !== WebSocket.OPEN) {
@@ -32,21 +37,41 @@ function setContextSettings(context, settings) {
   send("setSettings", { context, payload: settings });
 }
 
-async function refreshContext(context) {
+function cacheLocations(locations) {
+  state.locationsCache = locations;
+}
+
+async function getLocations({ forceRefetch = false } = {}) {
+  if (!forceRefetch && state.locationsCache) {
+    return state.locationsCache;
+  }
+
+  const locations = await fetchUvLocationsImpl();
+  cacheLocations(locations);
+  return locations;
+}
+
+async function refreshContext(context, { forceRefetch = true } = {}) {
+  const existingRefresh = state.inFlightRefreshes.get(context);
+  if (existingRefresh) {
+    return existingRefresh;
+  }
+
+  const refreshPromise = (async () => {
   const settings = state.contexts.get(context) ?? {};
 
   if (!settings.locationId) {
     setTitle(context, "Set ID");
-    return;
+    return undefined;
   }
 
   try {
-    const locations = await fetchUvLocations();
-    const uv = resolveUvForLocation(locations, settings.locationId);
+    const locations = await getLocations({ forceRefetch });
+    const uv = resolveUvForLocationImpl(locations, settings.locationId);
 
     if (!uv) {
       setTitle(context, "N/A");
-      return;
+      return undefined;
     }
 
     setTitle(context, `${uv.uv}`);
@@ -63,7 +88,13 @@ async function refreshContext(context) {
     }
   } catch {
     setTitle(context, "ERR");
+  } finally {
+    state.inFlightRefreshes.delete(context);
   }
+  })();
+
+  state.inFlightRefreshes.set(context, refreshPromise);
+  return refreshPromise;
 }
 
 function clearRefreshInterval(context) {
@@ -85,15 +116,14 @@ function scheduleRefresh(context) {
   }
 
   const timer = setInterval(() => {
-    refreshContext(context);
+    void refreshContext(context, { forceRefetch: true });
   }, intervalMs);
 
   state.intervals.set(context, timer);
 }
 
 async function sendLocationsToPropertyInspector(context) {
-  try {
-    const locations = await fetchUvLocations();
+  const sendLocations = (locations) =>
     send("sendToPropertyInspector", {
       context,
       action: state.actionUuid,
@@ -102,15 +132,17 @@ async function sendLocationsToPropertyInspector(context) {
         locations,
       },
     });
+
+  if (state.locationsCache) {
+    sendLocations(state.locationsCache);
+    return;
+  }
+
+  try {
+    const locations = await getLocations();
+    sendLocations(locations);
   } catch {
-    send("sendToPropertyInspector", {
-      context,
-      action: state.actionUuid,
-      payload: {
-        type: "locations",
-        locations: [],
-      },
-    });
+    sendLocations([]);
   }
 }
 
@@ -129,19 +161,19 @@ function onMessage(rawMessage) {
     case "willAppear": {
       upsertContext(message.context, message.payload.settings);
       scheduleRefresh(message.context);
-      refreshContext(message.context);
+      void refreshContext(message.context, { forceRefetch: true });
       break;
     }
 
     case "didReceiveSettings": {
       upsertContext(message.context, message.payload.settings);
       scheduleRefresh(message.context);
-      refreshContext(message.context);
+      void refreshContext(message.context, { forceRefetch: true });
       break;
     }
 
     case "keyDown": {
-      refreshContext(message.context);
+      void refreshContext(message.context, { forceRefetch: true });
       break;
     }
 
@@ -167,6 +199,38 @@ function onMessage(rawMessage) {
       break;
   }
 }
+
+export function setPluginTestDependencies({ fetchLocations, resolveLocation } = {}) {
+  if (fetchLocations) {
+    fetchUvLocationsImpl = fetchLocations;
+  }
+
+  if (resolveLocation) {
+    resolveUvForLocationImpl = resolveLocation;
+  }
+}
+
+export function resetPluginStateForTests() {
+  for (const interval of state.intervals.values()) {
+    clearInterval(interval);
+  }
+
+  state.ws = null;
+  state.actionUuid = null;
+  state.pluginUuid = null;
+  state.contexts.clear();
+  state.intervals.clear();
+  state.inFlightRefreshes.clear();
+  state.locationsCache = null;
+  fetchUvLocationsImpl = fetchUvLocations;
+  resolveUvForLocationImpl = resolveUvForLocation;
+}
+
+export const __pluginTestApi = {
+  state,
+  onMessage,
+  refreshContext,
+};
 
 function connectElgatoStreamDeckSocket(port, pluginUuid, registerEvent, info, actionInfo) {
   void info;
