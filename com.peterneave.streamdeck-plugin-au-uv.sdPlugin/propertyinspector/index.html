@@ -15,6 +15,11 @@
         display: block;
         margin-bottom: 6px;
       }
+      #status {
+        margin: -6px 0 12px;
+        font-size: 12px;
+        color: #bbb;
+      }
       select {
         width: 100%;
         margin-bottom: 12px;
@@ -28,6 +33,7 @@
   <body>
     <label for="locationId">Location</label>
     <select id="locationId"></select>
+    <p id="status" role="status" aria-live="polite"></p>
 
     <label for="refreshInterval">Refresh interval</label>
     <select id="refreshInterval">

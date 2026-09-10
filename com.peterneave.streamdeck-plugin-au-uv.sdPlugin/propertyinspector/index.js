@@ -7,6 +7,11 @@ const state = {
 
 const locationSelect = document.getElementById("locationId");
 const refreshIntervalSelect = document.getElementById("refreshInterval");
+const status = document.getElementById("status");
+
+function setStatus(text) {
+  status.textContent = text;
+}
 
 function send(event, payload = {}) {
   if (!state.ws || state.ws.readyState !== WebSocket.OPEN) {
@@ -46,6 +51,7 @@ function renderLocationOptions(locations, selectedLocationId) {
   }
 
   locationSelect.value = selectedLocationId ?? "";
+  setStatus(locations.length > 0 ? `${locations.length} locations loaded` : "No locations available");
 }
 
 function onMessage(rawMessage) {
@@ -74,6 +80,7 @@ function connectElgatoStreamDeckSocket(port, uuid, registerEvent, info, actionIn
   state.ws = ws;
 
   ws.addEventListener("open", () => {
+    setStatus("Loading locations...");
     send(registerEvent, { uuid });
     send("getSettings", { context: uuid });
     send("sendToPlugin", {
