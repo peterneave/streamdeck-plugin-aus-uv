@@ -13,9 +13,11 @@ const state = {
   actionUuid: null,
   pluginUuid: null,
   contexts: new Map(),
+  contextVersions: new Map(),
   intervals: new Map(),
   inFlightRefreshes: new Map(),
   locationsCache: null,
+  inFlightLocationsRequest: null,
 };
 
 let fetchUvLocationsImpl = fetchUvLocations;
@@ -46,27 +48,58 @@ async function getLocations({ forceRefetch = false } = {}) {
     return state.locationsCache;
   }
 
-  const locations = await fetchUvLocationsImpl();
-  cacheLocations(locations);
-  return locations;
+  if (!forceRefetch && state.inFlightLocationsRequest) {
+    return state.inFlightLocationsRequest;
+  }
+
+  const request = (async () => {
+    const locations = await fetchUvLocationsImpl();
+    cacheLocations(locations);
+    return locations;
+  })();
+
+  state.inFlightLocationsRequest = request;
+
+  try {
+    return await request;
+  } finally {
+    if (state.inFlightLocationsRequest === request) {
+      state.inFlightLocationsRequest = null;
+    }
+  }
+}
+
+function getContextVersion(context) {
+  return state.contextVersions.get(context) ?? 0;
+}
+
+function canMutateContext(context, version) {
+  return state.contexts.has(context) && getContextVersion(context) === version;
 }
 
 async function refreshContext(context, { forceRefetch = true } = {}) {
+  const version = getContextVersion(context);
   const existingRefresh = state.inFlightRefreshes.get(context);
-  if (existingRefresh) {
-    return existingRefresh;
+  if (existingRefresh && existingRefresh.version === version) {
+    return existingRefresh.promise;
   }
 
   const refreshPromise = (async () => {
   const settings = state.contexts.get(context) ?? {};
 
   if (!settings.locationId) {
-    setTitle(context, "Set ID");
+    if (canMutateContext(context, version)) {
+      setTitle(context, "Set ID");
+    }
     return undefined;
   }
 
   try {
     const locations = await getLocations({ forceRefetch });
+    if (!canMutateContext(context, version)) {
+      return undefined;
+    }
+
     const uv = resolveUvForLocationImpl(locations, settings.locationId);
 
     if (!uv) {
@@ -76,7 +109,7 @@ async function refreshContext(context, { forceRefetch = true } = {}) {
 
     setTitle(context, `${uv.uv}`);
 
-    if (settings.locationName !== uv.locationName) {
+    if (settings.locationName !== uv.locationName && canMutateContext(context, version)) {
       setContextSettings(context, {
         ...settings,
         locationName: uv.locationName,
@@ -87,13 +120,18 @@ async function refreshContext(context, { forceRefetch = true } = {}) {
       });
     }
   } catch {
-    setTitle(context, "ERR");
+    if (canMutateContext(context, version)) {
+      setTitle(context, "ERR");
+    }
   } finally {
-    state.inFlightRefreshes.delete(context);
+    const refreshEntry = state.inFlightRefreshes.get(context);
+    if (refreshEntry?.promise === refreshPromise) {
+      state.inFlightRefreshes.delete(context);
+    }
   }
   })();
 
-  state.inFlightRefreshes.set(context, refreshPromise);
+  state.inFlightRefreshes.set(context, { version, promise: refreshPromise });
   return refreshPromise;
 }
 
@@ -154,11 +192,16 @@ function upsertContext(context, settings) {
   });
 }
 
+function markContextVisible(context) {
+  state.contextVersions.set(context, getContextVersion(context) + 1);
+}
+
 function onMessage(rawMessage) {
   const message = JSON.parse(String(rawMessage));
 
   switch (message.event) {
     case "willAppear": {
+      markContextVisible(message.context);
       upsertContext(message.context, message.payload.settings);
       scheduleRefresh(message.context);
       void refreshContext(message.context, { forceRefetch: true });
@@ -180,7 +223,7 @@ function onMessage(rawMessage) {
     case "willDisappear": {
       clearRefreshInterval(message.context);
       state.contexts.delete(message.context);
-      state.inFlightRefreshes.delete(message.context);
+      state.contextVersions.delete(message.context);
       break;
     }
 
@@ -220,9 +263,11 @@ export function resetPluginStateForTests() {
   state.actionUuid = null;
   state.pluginUuid = null;
   state.contexts.clear();
+  state.contextVersions.clear();
   state.intervals.clear();
   state.inFlightRefreshes.clear();
   state.locationsCache = null;
+  state.inFlightLocationsRequest = null;
   fetchUvLocationsImpl = fetchUvLocations;
   resolveUvForLocationImpl = resolveUvForLocation;
 }

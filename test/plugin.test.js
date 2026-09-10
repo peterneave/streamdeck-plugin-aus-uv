@@ -120,3 +120,38 @@ test("location list requests use cached values after first fetch", async () => {
   assert.equal(locationPayloads.length, 2);
   assert.deepEqual(locationPayloads[0], locationPayloads[1]);
 });
+
+test("concurrent location list requests share in-flight fetch", async () => {
+  let resolveFetch;
+  let fetchCount = 0;
+  setPluginTestDependencies({
+    fetchLocations: async () => {
+      fetchCount += 1;
+      return new Promise((resolve) => {
+        resolveFetch = resolve;
+      });
+    },
+  });
+
+  createSendRecorder();
+  state.actionUuid = "com.peterneave.streamdeck-plugin-au-uv.action";
+
+  onMessage(
+    JSON.stringify({
+      event: "sendToPlugin",
+      context: "ctx",
+      payload: { type: "requestLocations" },
+    }),
+  );
+  onMessage(
+    JSON.stringify({
+      event: "sendToPlugin",
+      context: "ctx",
+      payload: { type: "requestLocations" },
+    }),
+  );
+
+  assert.equal(fetchCount, 1);
+  resolveFetch([{ locationId: "100", locationName: "Sydney", uv: 7 }]);
+  await new Promise((resolve) => setImmediate(resolve));
+});
