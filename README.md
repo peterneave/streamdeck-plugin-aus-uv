@@ -32,7 +32,7 @@ Screenshots coming soon.
 
 ### For Users
 
-1. Build or download the latest `.streamDeckPlugin` package
+1. Build or download `com.peterneave.streamdeck-plugin-au-uv.streamDeckPlugin` from the repository root
 2. Double-click the package to install it in Stream Deck
 3. Drag the **AU UV Index** action to a key
 4. Choose a location and refresh interval in the Property Inspector
@@ -64,7 +64,7 @@ After adding the action to your Stream Deck:
 1. **Clone the repository**:
 
    ```bash
-   git clone https://github.com/peterneave/streamdeck-plugin-aus-uv.git streamdeck-plugin-au-uv
+   git clone <repository-url> streamdeck-plugin-au-uv
    cd streamdeck-plugin-au-uv
    ```
 
@@ -95,7 +95,7 @@ After adding the action to your Stream Deck:
   npm run pack
   ```
 
-  Runs the tests, then packages `com.peterneave.streamdeck-plugin-au-uv.sdPlugin` into a distributable `.streamDeckPlugin` file, overwriting any previous build artifact.
+  Runs the tests, then packages `com.peterneave.streamdeck-plugin-au-uv.sdPlugin` into `./com.peterneave.streamdeck-plugin-au-uv.streamDeckPlugin`, overwriting any previous build artifact.
 
 - **Link Plugin for Development**:
 
