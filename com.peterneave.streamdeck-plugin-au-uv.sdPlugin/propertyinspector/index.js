@@ -61,6 +61,9 @@ function onMessage(rawMessage) {
     const settings = message.payload.settings ?? {};
     state.settings = settings;
     refreshIntervalSelect.value = settings.refreshInterval ?? "on-demand";
+    if (locationSelect.options.length > 0) {
+      locationSelect.value = settings.locationId ?? "";
+    }
     return;
   }
 

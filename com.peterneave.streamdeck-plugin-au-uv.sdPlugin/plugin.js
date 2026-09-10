@@ -209,9 +209,11 @@ function onMessage(rawMessage) {
     }
 
     case "didReceiveSettings": {
+      const previousLocationId = state.contexts.get(message.context)?.locationId;
       upsertContext(message.context, message.payload.settings);
       scheduleRefresh(message.context);
-      void refreshContext(message.context, { forceRefetch: true });
+      const nextLocationId = state.contexts.get(message.context)?.locationId;
+      void refreshContext(message.context, { forceRefetch: previousLocationId !== nextLocationId });
       break;
     }
 
@@ -224,6 +226,7 @@ function onMessage(rawMessage) {
       clearRefreshInterval(message.context);
       state.contexts.delete(message.context);
       state.contextVersions.delete(message.context);
+      state.inFlightRefreshes.delete(message.context);
       break;
     }
 
