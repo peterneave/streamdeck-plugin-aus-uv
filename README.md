@@ -78,6 +78,7 @@ After adding the action to your Stream Deck:
 
    - `.devcontainer/devcontainer.json` pins a Node.js 20.19.5 development environment and runs `npm install`
    - `.vscode/tasks.json` includes pack and link tasks for local Stream Deck development
+   - `npm run pack` and `npm run link` still require the native Stream Deck app and Elgato CLI runtime on the host; the dev container handles repository tooling, not Stream Deck itself
 
 ### Build Commands
 
