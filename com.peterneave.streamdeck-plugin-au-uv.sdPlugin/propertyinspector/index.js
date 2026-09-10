@@ -28,14 +28,6 @@ function saveSettings() {
     context: state.uuid,
     payload: settings,
   });
-
-  send("sendToPlugin", {
-    context: state.uuid,
-    action: state.actionInfo.action,
-    payload: {
-      type: "requestLocations",
-    },
-  });
 }
 
 function renderLocationOptions(locations, selectedLocationId) {
