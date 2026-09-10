@@ -32,7 +32,7 @@ Screenshots coming soon.
 
 ### For Users
 
-1. Build `dist/com.peterneave.streamdeck-plugin-au-uv.sdPlugin.streamDeckPlugin` with `npm run pack`
+1. Download the latest `.streamDeckPlugin` release artifact
 2. Double-click the package to install it in Stream Deck
 3. Drag the **AU UV Index** action to a key
 4. Choose a location and refresh interval in the Property Inspector
@@ -79,6 +79,7 @@ After adding the action to your Stream Deck:
    - `.devcontainer/devcontainer.json` pins a Node.js 20.19.5 development environment and runs `npm install`
    - `.vscode/tasks.json` includes pack and link tasks for local Stream Deck development
    - `npm install` provides the local Elgato CLI used by `npm run pack` and `npm run link`
+   - `npm run pack` works from the dev container because it only needs the checked-out plugin bundle and the local CLI
    - `npm run link` still requires the native Stream Deck desktop app on the host; the dev container only covers repository tooling
 
 ### Build Commands
