@@ -32,7 +32,7 @@
     "MinimumVersion": "6.6"
   },
   "UUID": "com.peterneave.streamdeck-plugin-au-uv",
-  "Version": "0.1.0",
+  "Version": "0.1.0.0",
   "OS": [
     {
       "Platform": "mac",
