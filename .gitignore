@@ -1,3 +1,4 @@
 node_modules/
 *.streamDeckPlugin
 .DS_Store
+dist/

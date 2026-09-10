@@ -3,7 +3,7 @@
 A Stream Deck plugin that displays current Australian UV index readings from the [ARPANSA UV data feed](https://uvdata.arpansa.gov.au/xml/uvvalues.xml). Monitor the latest UV value for a selected location directly on your Elgato Stream Deck.
 
 ![Version](https://img.shields.io/badge/version-0.1.0.0-blue)
-![Node.js](https://img.shields.io/badge/node-20.1%2B-green)
+![Node.js](https://img.shields.io/badge/node-20.5%2B-green)
 ![Stream Deck SDK](https://img.shields.io/badge/Stream%20Deck%20SDK-2-orange)
 
 ## Images
@@ -25,14 +25,14 @@ Screenshots coming soon.
 - **Operating System**:
   - Windows 10 or higher
   - macOS 13 or higher
-- **Node.js**: Version 20.1 or higher
+- **Node.js**: Version 20.5 or higher
 - **Internet Access**: Required to reach the ARPANSA UV feed
 
 ## Installation
 
 ### For Users
 
-1. Build or download `com.peterneave.streamdeck-plugin-au-uv.streamDeckPlugin` from the repository root
+1. Build or download `dist/com.peterneave.streamdeck-plugin-au-uv.streamDeckPlugin`
 2. Double-click the package to install it in Stream Deck
 3. Drag the **AU UV Index** action to a key
 4. Choose a location and refresh interval in the Property Inspector
@@ -95,7 +95,7 @@ After adding the action to your Stream Deck:
   npm run pack
   ```
 
-  Runs the tests, then packages `com.peterneave.streamdeck-plugin-au-uv.sdPlugin` into `./com.peterneave.streamdeck-plugin-au-uv.streamDeckPlugin`, overwriting any previous build artifact.
+  Runs the tests, then packages `com.peterneave.streamdeck-plugin-au-uv.sdPlugin` into `./dist/com.peterneave.streamdeck-plugin-au-uv.streamDeckPlugin`, overwriting any previous build artifact in that output directory.
 
 - **Link Plugin for Development**:
 

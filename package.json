@@ -7,7 +7,7 @@
   "scripts": {
     "test": "node --test",
     "build": "npm test",
-    "pack": "npm run build && streamdeck pack --force com.peterneave.streamdeck-plugin-au-uv.sdPlugin",
+    "pack": "npm run build && streamdeck pack --force --output dist com.peterneave.streamdeck-plugin-au-uv.sdPlugin",
     "link": "streamdeck link com.peterneave.streamdeck-plugin-au-uv.sdPlugin"
   },
   "dependencies": {
@@ -18,6 +18,6 @@
     "@elgato/cli": "^1.7.1"
   },
   "engines": {
-    "node": ">=20.1.0"
+    "node": ">=20.5.0"
   }
 }
