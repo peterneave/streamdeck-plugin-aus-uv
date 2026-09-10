@@ -1,0 +1,46 @@
+{
+  "Actions": [
+    {
+      "Icon": "images/actionIcon",
+      "Name": "AU UV Index",
+      "States": [
+        {
+          "Image": "images/actionIcon",
+          "TitleAlignment": "middle",
+          "FontSize": "24"
+        }
+      ],
+      "SupportedInMultiActions": true,
+      "Tooltip": "Shows current UV index for selected AU location",
+      "UUID": "com.peterneave.streamdeck-plugin-au-uv.action"
+    }
+  ],
+  "Author": "peterneave",
+  "CodePath": "plugin.js",
+  "Category": "Utilities",
+  "CategoryIcon": "images/categoryIcon",
+  "Description": "Display ARPANSA UV values by location",
+  "Icon": "images/pluginIcon",
+  "Name": "AU UV",
+  "Nodejs": {
+    "Debug": "enabled",
+    "Version": "20"
+  },
+  "PropertyInspectorPath": "propertyinspector/index.html",
+  "SDKVersion": 2,
+  "Software": {
+    "MinimumVersion": "6.6"
+  },
+  "UUID": "com.peterneave.streamdeck-plugin-au-uv",
+  "Version": "0.1.0",
+  "OS": [
+    {
+      "Platform": "mac",
+      "MinimumVersion": "13"
+    },
+    {
+      "Platform": "windows",
+      "MinimumVersion": "10"
+    }
+  ]
+}
