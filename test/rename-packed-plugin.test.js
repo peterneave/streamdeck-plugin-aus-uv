@@ -41,6 +41,18 @@ test('normalizePackedPluginArtifact renames the newest generated artifact to the
   assert.equal(fs.existsSync(path.join(distDir, generatedArtifactName)), false);
 });
 
+
+test('normalizePackedPluginArtifact breaks mtime ties deterministically by filename', () => {
+  const distDir = createTempDist();
+  writeArtifact(distDir, expectedArtifactName, 'old-stable', 1000);
+  writeArtifact(distDir, 'com.peterneave.streamdeck-plugin-au-uv-b.streamDeckPlugin', 'b-build', 2000);
+  writeArtifact(distDir, 'com.peterneave.streamdeck-plugin-au-uv-a.streamDeckPlugin', 'a-build', 2000);
+
+  normalizePackedPluginArtifact({ distDir });
+
+  assert.equal(fs.readFileSync(path.join(distDir, expectedArtifactName), 'utf8'), 'a-build');
+});
+
 test('normalizePackedPluginArtifact restores the previous artifact if replacement fails', () => {
   const distDir = createTempDist();
   const expectedPath = writeArtifact(distDir, expectedArtifactName, 'stable', 1000);
