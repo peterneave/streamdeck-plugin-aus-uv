@@ -5,6 +5,7 @@ const distDir = 'dist';
 const expectedArtifactName = 'com.peterneave.streamdeck-plugin-au-uv.sdPlugin.streamDeckPlugin';
 const pluginArtifactPrefix = 'com.peterneave.streamdeck-plugin-au-uv';
 const destinationPath = path.join(distDir, expectedArtifactName);
+const backupDestinationPath = `${destinationPath}.bak`;
 
 fs.mkdirSync(distDir, { recursive: true });
 
@@ -24,10 +25,28 @@ if (newArtifactNames.length === 0) {
   const sourcePath = path.join(distDir, newestArtifactName);
 
   if (sourcePath !== destinationPath) {
-    if (fs.existsSync(destinationPath)) {
-      fs.rmSync(destinationPath, { force: true });
+    const hadDestination = fs.existsSync(destinationPath);
+
+    if (fs.existsSync(backupDestinationPath)) {
+      fs.rmSync(backupDestinationPath, { force: true });
     }
 
-    fs.renameSync(sourcePath, destinationPath);
+    try {
+      if (hadDestination) {
+        fs.renameSync(destinationPath, backupDestinationPath);
+      }
+
+      fs.renameSync(sourcePath, destinationPath);
+
+      if (fs.existsSync(backupDestinationPath)) {
+        fs.rmSync(backupDestinationPath, { force: true });
+      }
+    } catch (error) {
+      if (!fs.existsSync(destinationPath) && fs.existsSync(backupDestinationPath)) {
+        fs.renameSync(backupDestinationPath, destinationPath);
+      }
+
+      throw error;
+    }
   }
 }
