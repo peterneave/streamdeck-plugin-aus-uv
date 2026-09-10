@@ -1,0 +1,53 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "Remove Pack",
+      "type": "shell",
+      "command": "rm",
+      "args": [
+        "-f",
+        "com.peterneave.streamdeck-plugin-au-uv.streamDeckPlugin"
+      ],
+      "windows": {
+        "command": "powershell",
+        "args": [
+          "-NoProfile",
+          "-Command",
+          "try { Remove-Item -Force -ErrorAction Stop \"com.peterneave.streamdeck-plugin-au-uv.streamDeckPlugin\" } catch { exit 0 }"
+        ]
+      },
+      "problemMatcher": [],
+      "group": "build",
+      "detail": "Delete the output plugin file before packing"
+    },
+    {
+      "type": "npm",
+      "script": "pack",
+      "group": {
+        "kind": "build",
+        "isDefault": true
+      },
+      "dependsOn": "Remove Pack",
+      "problemMatcher": [],
+      "label": "Build Pack",
+      "detail": "Pack the plugin for distribution"
+    },
+    {
+      "type": "npm",
+      "script": "link",
+      "problemMatcher": [],
+      "group": "build",
+      "label": "Link",
+      "detail": "Link the plugin for local Stream Deck development"
+    },
+    {
+      "type": "npm",
+      "script": "build",
+      "problemMatcher": [],
+      "group": "test",
+      "label": "npm: build",
+      "detail": "Run the automated test suite"
+    }
+  ]
+}
