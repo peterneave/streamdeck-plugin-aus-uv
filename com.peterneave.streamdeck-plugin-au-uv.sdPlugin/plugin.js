@@ -180,6 +180,7 @@ function onMessage(rawMessage) {
     case "willDisappear": {
       clearRefreshInterval(message.context);
       state.contexts.delete(message.context);
+      state.inFlightRefreshes.delete(message.context);
       break;
     }
 
