@@ -5,10 +5,19 @@
   "type": "module",
   "main": "com.peterneave.streamdeck-plugin-au-uv.sdPlugin/plugin.js",
   "scripts": {
-    "test": "node --test"
+    "test": "node --test",
+    "build": "npm test",
+    "pack": "npm run build && streamdeck pack --force --output dist com.peterneave.streamdeck-plugin-au-uv.sdPlugin && node scripts/rename-packed-plugin.mjs",
+    "link": "streamdeck link com.peterneave.streamdeck-plugin-au-uv.sdPlugin"
   },
   "dependencies": {
     "fast-xml-parser": "5.11.1",
     "ws": "8.21.3"
+  },
+  "devDependencies": {
+    "@elgato/cli": "^1.7.1"
+  },
+  "engines": {
+    "node": ">=20.5.0 <21"
   }
 }

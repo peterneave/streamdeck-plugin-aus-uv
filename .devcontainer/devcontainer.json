@@ -1,0 +1,20 @@
+{
+  "name": "streamdeck-plugin-au-uv",
+  "image": "mcr.microsoft.com/devcontainers/base:bookworm",
+  "features": {
+    "ghcr.io/devcontainers/features/node:1": {
+      "version": "20.19.5"
+    }
+  },
+  "postCreateCommand": "npm install",
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "humao.rest-client",
+        "vivaxy.vscode-conventional-commits",
+        "peterschmalfeldt.explorer-exclude",
+        "garrytrinder.dev-proxy-toolkit"
+      ]
+    }
+  }
+}
