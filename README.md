@@ -151,7 +151,6 @@ The plugin uses the ARPANSA UV XML feed:
 
 ### Plugin doesn't appear in Stream Deck
 
-- Verify Node.js 20 is installed: `node --version`
 - Check Stream Deck version is 6.6+
 - Confirm the plugin bundle was packed from `com.peterneave.streamdeck-plugin-au-uv.sdPlugin`
 
