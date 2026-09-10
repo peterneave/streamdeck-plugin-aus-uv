@@ -22,6 +22,7 @@ function saveSettings() {
     locationName: locationSelect.options[locationSelect.selectedIndex]?.text ?? "",
     refreshInterval: refreshIntervalSelect.value,
   };
+  state.settings = settings;
 
   send("setSettings", {
     context: state.uuid,
