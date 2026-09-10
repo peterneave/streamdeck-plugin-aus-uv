@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>AU UV Settings</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        margin: 12px;
+        color: #ddd;
+        background: #2f2f2f;
+      }
+      label {
+        display: block;
+        margin-bottom: 6px;
+      }
+      select {
+        width: 100%;
+        margin-bottom: 12px;
+        padding: 6px;
+      }
+    </style>
+  </head>
+  <body>
+    <label for="locationId">Location</label>
+    <select id="locationId"></select>
+
+    <label for="refreshInterval">Refresh interval</label>
+    <select id="refreshInterval">
+      <option value="on-demand">On demand</option>
+      <option value="5">Every 5 minutes</option>
+      <option value="10">Every 10 minutes</option>
+      <option value="30">Every 30 minutes</option>
+      <option value="60">Every 60 minutes</option>
+    </select>
+
+    <script type="module" src="./index.js"></script>
+  </body>
+</html>
