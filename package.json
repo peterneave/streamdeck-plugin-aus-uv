@@ -7,7 +7,7 @@
   "scripts": {
     "test": "node --test",
     "build": "npm test",
-    "pack": "npm run build && streamdeck pack --force --output dist com.peterneave.streamdeck-plugin-au-uv.sdPlugin && node -e \"const fs=require('node:fs'); const path=require('node:path'); const dir='dist'; const files=fs.readdirSync(dir).filter(name=>name.endsWith('.streamDeckPlugin')); if(files.length!==1) throw new Error('Expected exactly one packaged plugin artifact in dist'); const src=path.join(dir, files[0]); const dest=path.join(dir, 'com.peterneave.streamdeck-plugin-au-uv.sdPlugin.streamDeckPlugin'); if(src !== dest){ if (fs.existsSync(dest)) fs.rmSync(dest,{force:true}); fs.renameSync(src,dest); }\"",
+    "pack": "npm run build && streamdeck pack --force --output dist com.peterneave.streamdeck-plugin-au-uv.sdPlugin && node scripts/rename-packed-plugin.mjs",
     "link": "streamdeck link com.peterneave.streamdeck-plugin-au-uv.sdPlugin"
   },
   "dependencies": {
