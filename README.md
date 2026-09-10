@@ -2,7 +2,7 @@
 
 A Stream Deck plugin that displays current Australian UV index readings from the [ARPANSA UV data feed](https://uvdata.arpansa.gov.au/xml/uvvalues.xml). Monitor the latest UV value for a selected location directly on your Elgato Stream Deck.
 
-![Version](https://img.shields.io/badge/version-0.1.0-blue)
+![Version](https://img.shields.io/badge/version-0.1.0.0-blue)
 ![Node.js](https://img.shields.io/badge/node-20-green)
 ![Stream Deck SDK](https://img.shields.io/badge/Stream%20Deck%20SDK-2-orange)
 
@@ -93,7 +93,7 @@ After adding the action to your Stream Deck:
   npm run pack
   ```
 
-  Runs the tests, then packages `com.peterneave.streamdeck-plugin-au-uv.sdPlugin` into a distributable `.streamDeckPlugin` file.
+  Runs the tests, then packages `com.peterneave.streamdeck-plugin-au-uv.sdPlugin` into a distributable `.streamDeckPlugin` file, overwriting any previous build artifact.
 
 - **Link Plugin for Development**:
 

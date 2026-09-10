@@ -7,7 +7,7 @@
         {
           "Image": "images/actionIcon",
           "TitleAlignment": "middle",
-          "FontSize": "24"
+          "FontSize": 24
         }
       ],
       "SupportedInMultiActions": true,
@@ -17,7 +17,7 @@
   ],
   "Author": "peterneave",
   "CodePath": "plugin.js",
-  "Category": "Utilities",
+  "Category": "AU UV",
   "CategoryIcon": "images/categoryIcon",
   "Description": "Display ARPANSA UV values by location",
   "Icon": "images/pluginIcon",
