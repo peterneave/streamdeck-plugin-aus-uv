@@ -7,7 +7,7 @@
   "scripts": {
     "test": "node --test",
     "build": "npm test",
-    "pack": "npm run build && streamdeck pack com.peterneave.streamdeck-plugin-au-uv.sdPlugin",
+    "pack": "npm run build && streamdeck pack --force com.peterneave.streamdeck-plugin-au-uv.sdPlugin",
     "link": "streamdeck link com.peterneave.streamdeck-plugin-au-uv.sdPlugin"
   },
   "dependencies": {
