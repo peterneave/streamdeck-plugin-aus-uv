@@ -16,7 +16,6 @@
       "type": "npm",
       "script": "link",
       "problemMatcher": [],
-      "group": "build",
       "label": "Link",
       "detail": "Link the plugin for local Stream Deck development"
     },
