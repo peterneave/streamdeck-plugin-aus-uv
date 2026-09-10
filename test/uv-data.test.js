@@ -52,3 +52,33 @@ test("resolveUvForLocation returns null if no location ID selected", () => {
   const result = resolveUvForLocation([{ locationId: "1", locationName: "Melbourne", uv: 5 }], "");
   assert.equal(result, null);
 });
+
+test("resolveUvForLocation returns selected location", () => {
+  const locations = [
+    { locationId: "1", locationName: "Melbourne", uv: 5 },
+    { locationId: "2", locationName: "Perth", uv: 9 },
+  ];
+  const result = resolveUvForLocation(locations, "2");
+  assert.deepEqual(result, { locationId: "2", locationName: "Perth", uv: 9 });
+});
+
+test("parseLocationsFromXml ignores records with non-numeric UV values", () => {
+  const xml = `
+    <uvdata>
+      <location id="AUS001">
+        <name>Adelaide</name>
+        <uv>6</uv>
+      </location>
+      <location id="AUS002">
+        <name>Sydney</name>
+        <uv>n/a</uv>
+      </location>
+      <location id="AUS003">
+        <name>Brisbane</name>
+      </location>
+    </uvdata>
+  `;
+
+  const locations = parseLocationsFromXml(xml);
+  assert.deepEqual(locations, [{ locationId: "AUS001", locationName: "Adelaide", uv: 6 }]);
+});

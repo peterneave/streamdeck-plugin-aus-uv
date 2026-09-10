@@ -2,6 +2,7 @@ const state = {
   ws: null,
   uuid: null,
   actionInfo: null,
+  settings: {},
 };
 
 const locationSelect = document.getElementById("locationId");
@@ -59,12 +60,13 @@ function onMessage(rawMessage) {
 
   if (message.event === "didReceiveSettings") {
     const settings = message.payload.settings ?? {};
+    state.settings = settings;
     refreshIntervalSelect.value = settings.refreshInterval ?? "on-demand";
     return;
   }
 
   if (message.event === "sendToPropertyInspector" && message.payload?.type === "locations") {
-    const selectedLocationId = (state.actionInfo.payload?.settings ?? {}).locationId;
+    const selectedLocationId = state.settings.locationId ?? (state.actionInfo.payload?.settings ?? {}).locationId;
     renderLocationOptions(message.payload.locations ?? [], selectedLocationId);
   }
 }
@@ -73,6 +75,7 @@ function connectElgatoStreamDeckSocket(port, uuid, registerEvent, info, actionIn
   void info;
   state.uuid = uuid;
   state.actionInfo = JSON.parse(actionInfo);
+  state.settings = state.actionInfo.payload?.settings ?? {};
 
   const ws = new WebSocket(`ws://localhost:${port}`);
   state.ws = ws;
