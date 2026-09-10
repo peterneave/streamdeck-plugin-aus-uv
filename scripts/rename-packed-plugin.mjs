@@ -28,7 +28,7 @@ export function normalizePackedPluginArtifact({
 
   const newestArtifactName = newArtifactNames
     .map((name) => ({ name, mtimeMs: fsModule.statSync(pathModule.join(distDir, name)).mtimeMs }))
-    .sort((left, right) => right.mtimeMs - left.mtimeMs)[0].name;
+    .sort((left, right) => right.mtimeMs - left.mtimeMs || left.name.localeCompare(right.name))[0].name;
   const sourcePath = pathModule.join(distDir, newestArtifactName);
 
   if (sourcePath === destinationPath) {
