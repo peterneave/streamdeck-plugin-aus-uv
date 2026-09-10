@@ -28,6 +28,10 @@ test.beforeEach(() => {
   resetPluginStateForTests();
 });
 
+test.afterEach(() => {
+  resetPluginStateForTests();
+});
+
 test("refreshContext shows Set ID when location is missing", async () => {
   const messages = createSendRecorder();
   state.contexts.set("ctx", {});
@@ -154,4 +158,30 @@ test("concurrent location list requests share in-flight fetch", async () => {
   assert.equal(fetchCount, 1);
   resolveFetch([{ locationId: "100", locationName: "Sydney", uv: 7 }]);
   await new Promise((resolve) => setImmediate(resolve));
+});
+
+test("didReceiveSettings reuses cache when location ID is unchanged", async () => {
+  createSendRecorder();
+  state.contexts.set("ctx", { locationId: "1", refreshInterval: "5" });
+  state.contextVersions.set("ctx", 1);
+  state.locationsCache = [{ locationId: "1", locationName: "Melbourne", uv: 5 }];
+
+  let fetchCount = 0;
+  setPluginTestDependencies({
+    fetchLocations: async () => {
+      fetchCount += 1;
+      return [];
+    },
+  });
+
+  onMessage(
+    JSON.stringify({
+      event: "didReceiveSettings",
+      context: "ctx",
+      payload: { settings: { locationId: "1", refreshInterval: "10" } },
+    }),
+  );
+
+  await new Promise((resolve) => setImmediate(resolve));
+  assert.equal(fetchCount, 0);
 });
