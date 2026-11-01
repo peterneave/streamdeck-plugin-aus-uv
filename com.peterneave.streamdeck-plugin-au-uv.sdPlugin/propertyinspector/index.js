@@ -3,6 +3,7 @@ const state = {
   uuid: null,
   actionInfo: null,
   settings: {},
+  locationRequestTimer: null,
 };
 
 const locationSelect = document.getElementById("locationId");
@@ -32,6 +33,16 @@ function saveSettings() {
   send("setSettings", {
     context: state.uuid,
     payload: settings,
+  });
+}
+
+function requestLocations() {
+  send("sendToPlugin", {
+    context: state.uuid,
+    action: state.actionInfo.action,
+    payload: {
+      type: "requestLocations",
+    },
   });
 }
 
@@ -68,6 +79,8 @@ function onMessage(rawMessage) {
   }
 
   if (message.event === "sendToPropertyInspector" && message.payload?.type === "locations") {
+    clearInterval(state.locationRequestTimer);
+    state.locationRequestTimer = null;
     const selectedLocationId = state.settings.locationId ?? (state.actionInfo.payload?.settings ?? {}).locationId;
     renderLocationOptions(message.payload.locations ?? [], selectedLocationId);
   }
@@ -86,16 +99,20 @@ function connectElgatoStreamDeckSocket(port, uuid, registerEvent, info, actionIn
     setStatus("Loading locations...");
     send(registerEvent, { uuid });
     send("getSettings", { context: uuid });
-    send("sendToPlugin", {
-      context: uuid,
-      action: state.actionInfo.action,
-      payload: {
-        type: "requestLocations",
-      },
-    });
+    clearInterval(state.locationRequestTimer);
+    state.locationRequestTimer = setInterval(requestLocations, 2000);
+    requestLocations();
   });
 
   ws.addEventListener("message", onMessage);
+  ws.addEventListener("close", () => {
+    clearInterval(state.locationRequestTimer);
+    state.locationRequestTimer = null;
+    setStatus("Disconnected from Stream Deck");
+  });
+  ws.addEventListener("error", () => {
+    setStatus("Unable to connect to Stream Deck");
+  });
 }
 
 locationSelect.addEventListener("change", saveSettings);
