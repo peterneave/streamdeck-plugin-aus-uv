@@ -1,4 +1,4 @@
-# AU UV Index for Stream Deck
+# Australian UV Index for Stream Deck
 
 A Stream Deck plugin that displays current Australian UV index readings from the [ARPANSA UV data feed](https://uvdata.arpansa.gov.au/xml/uvvalues.xml). Monitor the latest UV value for a selected location directly on your Elgato Stream Deck.
 
@@ -21,7 +21,7 @@ Screenshots coming soon.
 
 ## Prerequisites
 
-- **Elgato Stream Deck**: Software version 6.6 or higher
+- **Elgato Stream Deck**: Software version 6.9 or higher
 - **Operating System**:
   - Windows 10 or higher
   - macOS 13 or higher
@@ -34,7 +34,7 @@ Screenshots coming soon.
 
 1. Download the latest `.streamDeckPlugin` release artifact
 2. Double-click the package to install it in Stream Deck
-3. Drag the **AU UV Index** action to a key
+3. Drag the **Australian UV Index** action to a key
 4. Choose a location and refresh interval in the Property Inspector
 
 ### For Developers

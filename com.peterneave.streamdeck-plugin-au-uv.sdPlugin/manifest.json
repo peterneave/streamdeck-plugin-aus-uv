@@ -2,7 +2,7 @@
   "Actions": [
     {
       "Icon": "images/actionIcon",
-      "Name": "AU UV Index",
+      "Name": "Australian UV Index",
       "States": [
         {
           "Image": "images/actionIcon",
@@ -17,19 +17,19 @@
   ],
   "Author": "peterneave",
   "CodePath": "bin/plugin.js",
-  "Category": "AU UV",
+  "Category": "Australian UV",
   "CategoryIcon": "images/categoryIcon",
   "Description": "Display ARPANSA UV values by location",
   "Icon": "images/pluginIcon",
-  "Name": "AU UV",
+  "Name": "Australian UV",
   "Nodejs": {
     "Debug": "enabled",
     "Version": "20"
   },
   "PropertyInspectorPath": "propertyinspector/index.html",
-  "SDKVersion": 2,
+  "SDKVersion": 3,
   "Software": {
-    "MinimumVersion": "6.6"
+    "MinimumVersion": "6.9"
   },
   "UUID": "com.peterneave.streamdeck-plugin-au-uv",
   "Version": "0.1.0.0",
