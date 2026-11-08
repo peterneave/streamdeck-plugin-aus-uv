@@ -108,11 +108,20 @@ After adding the action to your Stream Deck:
 
   Links the plugin bundle into the local Stream Deck installation for iterative testing.
 
+- **Unlink Plugin**:
+
+  ```bash
+  npm run unlink
+  ```
+
+  Removes the development link from the local Stream Deck installation, for example before installing the packaged `.streamDeckPlugin`.
+
 ### VS Code Shortcuts
 
 - **Pack plugin**: Press `Ctrl+Shift+B` and run the default build task (`Build Pack`)
 - **Run tests**: Open Command Palette and run `Tasks: Run Task` → `npm: build`
 - **Link plugin**: Open Command Palette and run `Tasks: Run Task` → `Link`
+- **Unlink plugin**: Open Command Palette and run `Tasks: Run Task` → `Unlink`
 
 ### Development Workflow
 

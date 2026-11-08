@@ -5,12 +5,12 @@ import { parseLocationsFromXml, resolveUvForLocation } from "../com.peterneave.s
 test("parseLocationsFromXml extracts locations and UV values", () => {
   const xml = `
     <uvdata>
-      <location id="AUS001">
-        <name>Adelaide</name>
+      <location id="Adelaide">
+        <name>adl</name>
         <uv>6</uv>
       </location>
-      <location id="AUS002">
-        <name>Sydney</name>
+      <location id="Sydney">
+        <name>syd</name>
         <uvValue>8</uvValue>
       </location>
     </uvdata>
@@ -18,9 +18,11 @@ test("parseLocationsFromXml extracts locations and UV values", () => {
 
   const locations = parseLocationsFromXml(xml);
 
+  // The ARPANSA feed uses the city as the id and a short code as the name,
+  // so the display name should be the city.
   assert.deepEqual(locations, [
-    { locationId: "AUS001", locationName: "Adelaide", uv: 6 },
-    { locationId: "AUS002", locationName: "Sydney", uv: 8 },
+    { locationId: "Adelaide", locationName: "Adelaide", uv: 6 },
+    { locationId: "Sydney", locationName: "Sydney", uv: 8 },
   ]);
 });
 
@@ -65,20 +67,20 @@ test("resolveUvForLocation returns selected location", () => {
 test("parseLocationsFromXml ignores records with non-numeric UV values", () => {
   const xml = `
     <uvdata>
-      <location id="AUS001">
-        <name>Adelaide</name>
+      <location id="Adelaide">
+        <name>adl</name>
         <uv>6</uv>
       </location>
-      <location id="AUS002">
-        <name>Sydney</name>
+      <location id="Sydney">
+        <name>syd</name>
         <uv>n/a</uv>
       </location>
-      <location id="AUS003">
-        <name>Brisbane</name>
+      <location id="Brisbane">
+        <name>bri</name>
       </location>
     </uvdata>
   `;
 
   const locations = parseLocationsFromXml(xml);
-  assert.deepEqual(locations, [{ locationId: "AUS001", locationName: "Adelaide", uv: 6 }]);
+  assert.deepEqual(locations, [{ locationId: "Adelaide", locationName: "Adelaide", uv: 6 }]);
 });

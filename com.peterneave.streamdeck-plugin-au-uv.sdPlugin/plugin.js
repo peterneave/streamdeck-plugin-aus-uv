@@ -281,14 +281,13 @@ export const __pluginTestApi = {
   refreshContext,
 };
 
-function connectElgatoStreamDeckSocket(port, pluginUuid, registerEvent, info, actionInfo) {
-  void info;
+const ACTION_UUID = "com.peterneave.streamdeck-plugin-au-uv.action";
 
-  const parsedActionInfo = JSON.parse(actionInfo);
-  state.actionUuid = parsedActionInfo.action;
+function connectElgatoStreamDeckSocket(port, pluginUuid, registerEvent) {
+  state.actionUuid = ACTION_UUID;
   state.pluginUuid = pluginUuid;
 
-  const ws = new WebSocket(`ws://localhost:${port}`);
+  const ws = new WebSocket(`ws://127.0.0.1:${port}`);
   state.ws = ws;
 
   ws.on("open", () => {
@@ -298,4 +297,19 @@ function connectElgatoStreamDeckSocket(port, pluginUuid, registerEvent, info, ac
   ws.on("message", onMessage);
 }
 
-globalThis.connectElgatoStreamDeckSocket = connectElgatoStreamDeckSocket;
+// Stream Deck launches Node.js plugins as a process and passes the connection
+// details as command-line arguments; it does not call a global function.
+function parseStreamDeckArgs(argv) {
+  const args = {};
+  for (let i = 0; i < argv.length - 1; i++) {
+    if (argv[i].startsWith("-")) {
+      args[argv[i].replace(/^-+/, "")] = argv[i + 1];
+    }
+  }
+  return args;
+}
+
+const launchArgs = parseStreamDeckArgs(process.argv.slice(2));
+if (launchArgs.port && launchArgs.pluginUUID && launchArgs.registerEvent) {
+  connectElgatoStreamDeckSocket(launchArgs.port, launchArgs.pluginUUID, launchArgs.registerEvent);
+}

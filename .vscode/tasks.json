@@ -21,6 +21,13 @@
     },
     {
       "type": "npm",
+      "script": "unlink",
+      "problemMatcher": [],
+      "label": "Unlink",
+      "detail": "Unlink the plugin from the local Stream Deck installation"
+    },
+    {
+      "type": "npm",
       "script": "build",
       "problemMatcher": [],
       "group": "test",
