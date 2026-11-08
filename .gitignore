@@ -2,3 +2,4 @@ node_modules/
 *.streamDeckPlugin
 .DS_Store
 dist/
+com.peterneave.streamdeck-plugin-au-uv.sdPlugin/bin/

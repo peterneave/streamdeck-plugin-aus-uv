@@ -57,7 +57,7 @@ function renderLocationOptions(locations, selectedLocationId) {
   for (const location of locations) {
     const option = document.createElement("option");
     option.value = location.locationId;
-    option.textContent = `${location.locationName} (${location.locationId})`;
+    option.textContent = location.locationName;
     locationSelect.appendChild(option);
   }
 

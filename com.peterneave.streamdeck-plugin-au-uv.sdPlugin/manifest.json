@@ -16,7 +16,7 @@
     }
   ],
   "Author": "peterneave",
-  "CodePath": "plugin.js",
+  "CodePath": "bin/plugin.js",
   "Category": "AU UV",
   "CategoryIcon": "images/categoryIcon",
   "Description": "Display ARPANSA UV values by location",

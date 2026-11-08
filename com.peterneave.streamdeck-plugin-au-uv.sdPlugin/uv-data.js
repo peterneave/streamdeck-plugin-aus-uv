@@ -43,9 +43,11 @@ function normalizeRecord(record) {
     return null;
   }
 
-  const locationName = String(
-    readAny(record, ["name", "location", "station", "city", "description", "title"]) ?? locationId,
-  ).trim();
+  // The ARPANSA feed uses the city as the id attribute ("Melbourne") and a short
+  // code as <name> ("mel"), so prefer a non-numeric id as the display name.
+  const locationName = /^\d+$/.test(locationId)
+    ? String(readAny(record, ["name", "location", "station", "city", "description", "title"]) ?? locationId).trim()
+    : locationId;
 
   return {
     locationId,
