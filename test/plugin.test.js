@@ -67,6 +67,34 @@ test("refreshContext shows ERR when UV fetch fails", async () => {
   assert.deepEqual(titles(messages), ["ERR"]);
 });
 
+test("refreshContext sets a coloured key image and clears the title", async () => {
+  const messages = createSendRecorder();
+  setPluginTestDependencies({
+    fetchLocations: async () => [{ locationId: "1", locationName: "Melbourne", uv: 11 }],
+  });
+  state.contexts.set("ctx", { locationId: "1", locationName: "Melbourne" });
+
+  await refreshContext("ctx", { forceRefetch: true });
+
+  assert.deepEqual(titles(messages), [""]);
+  const images = messages.filter((entry) => entry.event === "setImage");
+  assert.equal(images.length, 1);
+  const svg = Buffer.from(images[0].payload.image.split(",")[1], "base64").toString();
+  assert.match(svg, /fill="#e0dbf9"/);
+  assert.match(svg, />Extreme</);
+});
+
+test("status messages reset the key to the default image", async () => {
+  const messages = createSendRecorder();
+  state.contexts.set("ctx", {});
+
+  await refreshContext("ctx", { forceRefetch: true });
+
+  const images = messages.filter((entry) => entry.event === "setImage");
+  assert.equal(images.length, 1);
+  assert.equal(images[0].payload.image, undefined);
+});
+
 test("refreshContext reuses in-flight fetch per context", async () => {
   let fetchCount = 0;
   setPluginTestDependencies({

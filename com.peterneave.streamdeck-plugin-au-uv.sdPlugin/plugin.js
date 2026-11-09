@@ -1,5 +1,6 @@
 import WebSocket from "ws";
 import { fetchUvLocations, resolveUvForLocation } from "./uv-data.js";
+import { buildUvKeyImage } from "./uv-scale.js";
 
 const REFRESH_MINUTES_TO_MS = {
   "5": 5 * 60 * 1000,
@@ -33,6 +34,17 @@ function send(event, payload = {}) {
 
 function setTitle(context, title) {
   send("setTitle", { context, payload: { title, target: 0 } });
+}
+
+// Omitting the image resets the key to the default icon from the manifest.
+function setImage(context, image) {
+  send("setImage", { context, payload: image ? { image, target: 0 } : { target: 0 } });
+}
+
+// Show a status message on the default icon.
+function showStatus(context, title) {
+  setImage(context, null);
+  setTitle(context, title);
 }
 
 function setContextSettings(context, settings) {
@@ -89,7 +101,7 @@ async function refreshContext(context, { forceRefetch = true } = {}) {
 
   if (!settings.locationId) {
     if (canMutateContext(context, version)) {
-      setTitle(context, "Set ID");
+      showStatus(context, "Set ID");
     }
     return undefined;
   }
@@ -103,11 +115,14 @@ async function refreshContext(context, { forceRefetch = true } = {}) {
     const uv = resolveUvForLocationImpl(locations, settings.locationId);
 
     if (!uv) {
-      setTitle(context, "N/A");
+      showStatus(context, "N/A");
       return undefined;
     }
 
-    setTitle(context, `${uv.uv}`);
+    // The value and category are drawn into the image; clear the title so it
+    // doesn't overlay them.
+    setImage(context, buildUvKeyImage(uv.uv));
+    setTitle(context, "");
 
     if (settings.locationName !== uv.locationName && canMutateContext(context, version)) {
       setContextSettings(context, {
@@ -121,7 +136,7 @@ async function refreshContext(context, { forceRefetch = true } = {}) {
     }
   } catch {
     if (canMutateContext(context, version)) {
-      setTitle(context, "ERR");
+      showStatus(context, "ERR");
     }
   } finally {
     const refreshEntry = state.inFlightRefreshes.get(context);
