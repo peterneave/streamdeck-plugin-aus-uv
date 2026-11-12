@@ -1,4 +1,20 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="144" height="144" viewBox="0 0 144 144">
-  <rect width="144" height="144" rx="16" fill="#1f2d3d"/>
-  <text x="72" y="84" font-size="52" text-anchor="middle" fill="#ffd166" font-family="Arial">UV</text>
+<svg xmlns="http://www.w3.org/2000/svg" width="256" height="256" viewBox="0 0 256 256">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#2f4560"/>
+      <stop offset="1" stop-color="#1f2d3d"/>
+    </linearGradient>
+  </defs>
+  <rect width="256" height="256" rx="48" fill="url(#bg)"/>
+  <g stroke="#ffb347" stroke-width="12" stroke-linecap="round" fill="none">
+    <path d="M128 46V22M128 170V194M190 108H214M66 108H42M171.8 64.2L188.8 47.2M84.2 64.2L67.2 47.2M171.8 151.8L188.8 168.8M84.2 151.8L67.2 168.8"/>
+  </g>
+  <circle cx="128" cy="108" r="44" fill="#ffd166"/>
+  <g>
+    <rect x="52" y="208" width="28" height="18" rx="5" fill="#d4f2bc"/>
+    <rect x="83" y="208" width="28" height="18" rx="5" fill="#f9f5c2"/>
+    <rect x="114" y="208" width="28" height="18" rx="5" fill="#fde1bf"/>
+    <rect x="145" y="208" width="28" height="18" rx="5" fill="#f2b8bf"/>
+    <rect x="176" y="208" width="28" height="18" rx="5" fill="#e0dbf9"/>
+  </g>
 </svg>
