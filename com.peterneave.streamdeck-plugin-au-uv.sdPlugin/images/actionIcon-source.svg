@@ -1,4 +1,1 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="144" height="144" viewBox="0 0 144 144">
-  <rect width="144" height="144" rx="16" fill="#1f2d3d"/>
-  <text x="72" y="84" font-size="52" text-anchor="middle" fill="#ffd166" font-family="Arial">UV</text>
-</svg>
+<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20"><g fill="none" stroke="#FFFFFF" stroke-width="1.5" stroke-linecap="round"><circle cx="10" cy="10" r="3.5"/><path d="M10 4V1.5M10 16V18.5M16 10H18.5M4 10H1.5M14.24 5.76L16.01 3.99M5.76 5.76L3.99 3.99M14.24 14.24L16.01 16.01M5.76 14.24L3.99 16.01"/></g></svg>
